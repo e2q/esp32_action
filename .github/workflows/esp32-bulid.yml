@@ -1,0 +1,64 @@
+name: esp32 build
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@main
+     
+    - name: 1. Install prerequisites
+      run: |
+        sudo apt-get update
+        sudo apt-get install git wget flex bison gperf python python-pip python-setuptools cmake ninja-build ccache libffi-dev libssl-dev dfu-util
+        sudo apt-get clean
+        sudo apt-get install python3 python3-pip python3-setuptools
+        
+    - name: 2. Get ESP-IDF
+      run: |
+        mkdir -p ~/esp
+        cd ~/esp
+        git clone -b v4.1 --recursive https://github.com/espressif/esp-idf.git
+    - name: 3. Set up the tools
+      run: |
+        cd ~/esp/esp-idf
+        ./install.sh
+        
+    - name: 4. Git MK32
+      run: |
+        cd ~/esp
+        git clone https://github.com/Jasonbroker/MK32
+        
+    - name: 5. Set up the environment variables
+      run: |
+        cd ~/esp
+        . $HOME/esp/esp-idf/export.sh
+        
+    - name: 6. SSH connection to Actions
+      uses: P3TERX/ssh2actions@main
+      with:
+        mode: ngrok
+      env:
+        # After sign up on the https://ngrok.com
+        # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
+        NGROK_TOKEN: 1kYfpdBx3YtbITqxVcmKKdRC4Wc_4KHmRVZA6Kd25js5dDs9
+    
+        # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
+        # You can find this server region here: https://ngrok.com/docs#global-locations
+        NGROK_REGION: us
+
+        # This password you will use when authorizing via SSH
+        SSH_PASSWORD: 123456
+        
+    - name: 7. files
+      uses: actions/upload-artifact@main
+      with:
+        name: binfil
+        path: ~/esp/MK32/build
+    
