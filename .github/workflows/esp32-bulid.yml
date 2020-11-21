@@ -16,7 +16,7 @@ on:
 #    - cron: 0 8 * * 5
   
 env:
-  REPO_URL: https://github.com/lovesugarxyz/MK32/tree/master
+  REPO_URL: https://github.com/Jasonbroker/MK32
   NGROK_TOKEN: 1kYfpdBx3YtbITqxVcmKKdRC4Wc_4KHmRVZA6Kd25js5dDs9
   SSH_PASSWORD: 123456
 jobs:
