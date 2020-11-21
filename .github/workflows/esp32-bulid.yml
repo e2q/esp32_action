@@ -17,8 +17,8 @@ on:
   
 env:
   REPO_URL: https://github.com/lovesugarxyz/MK32
-  NGROK_TOKEN: 1kYfpdBx3YtbITqxVcmKKdRC4Wc_4KHmRVZA6Kd25js5dDs9
-  SSH_PASSWORD: 123456
+  NGROKTOKEN: 1kYfpdBx3YtbITqxVcmKKdRC4Wc_4KHmRVZA6Kd25js5dDs9
+  SSHPASSWD: 123456
 jobs:
   build:
     runs-on: ubuntu-18.04
@@ -65,14 +65,14 @@ jobs:
       env:
         # After sign up on the https://ngrok.com
         # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
-        NGROK_TOKEN: $NGROK_TOKEN
+        NGROK_TOKEN: $NGROKTOKEN
     
         # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
         # You can find this server region here: https://ngrok.com/docs#global-locations
         NGROK_REGION: us
 
         # This password you will use when authorizing via SSH
-        SSH_PASSWORD: $SSH_PASSWORD
+        SSH_PASSWORD: $SSHPASSWD
         
     - name: Tmate connection to actions
       uses: P3TERX/ssh2actions@main
