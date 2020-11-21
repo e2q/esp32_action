@@ -12,13 +12,12 @@ on:
         description: 'Tmate to Actions'
         required: false
         default: 'false'
-#  schedule:
-#    - cron: 0 8 * * 5
+  schedule:
+    - cron: 0 8 * * 5
   
 env:
   REPO_URL: https://github.com/lovesugarxyz/MK32
-  NGROKTOKEN: 1kYfpdBx3YtbITqxVcmKKdRC4Wc_4KHmRVZA6Kd25js5dDs9
-  SSHPASSWD: 123456
+
 jobs:
   build:
     runs-on: ubuntu-18.04
@@ -65,14 +64,14 @@ jobs:
       env:
         # After sign up on the https://ngrok.com
         # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
-        NGROK_TOKEN: $NGROKTOKEN
+        NGROK_TOKEN: 123456789
     
         # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
         # You can find this server region here: https://ngrok.com/docs#global-locations
         NGROK_REGION: us
 
         # This password you will use when authorizing via SSH
-        SSH_PASSWORD: $SSHPASSWD
+        SSH_PASSWORD: 123456789
         
     - name: Tmate connection to actions
       uses: P3TERX/ssh2actions@main
