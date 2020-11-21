@@ -57,6 +57,8 @@ jobs:
         
     - name: 6. Compile
       run: |
+        cd ~/esp
+        . $HOME/esp/esp-idf/export.sh
         cd ~/esp/MK32
         make -j1
         
@@ -81,14 +83,14 @@ jobs:
       uses: P3TERX/ssh2actions@main
       if: (github.event.inputs.tmate_ssh == 'true')
         
-    - name: 8. Collect files
+    - name: 9. Collect files
       run: |
         cd ~/esp/MK32
         mkdir upload_files
         find build/ -name '*.bin' |xargs tar czf upload_files.tgz
         tar zxvf upload_files.tgz -C upload_files
         
-    - name: 9. Upload-artifact
+    - name: 10. Upload-artifact
       uses: actions/upload-artifact@main
       with:
         name: binfile
