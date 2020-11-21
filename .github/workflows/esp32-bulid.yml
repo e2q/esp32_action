@@ -12,8 +12,8 @@ on:
         description: 'Tmate to Actions'
         required: false
         default: 'false'
-  schedule:
-    - cron: 0 8 * * 5
+#  schedule:
+#    - cron: 0 8 * * 5
   
 env:
   REPO_URL: https://github.com/lovesugarxyz/MK32
