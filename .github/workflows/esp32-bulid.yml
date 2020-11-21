@@ -3,7 +3,18 @@ name: esp32 build
 on:
   repository_dispatch:
   workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'Ngrok to Actions'
+        required: false
+        default: 'false'
+#  schedule:
+#    - cron: 0 8 * * 5
   
+env:
+  REPO_URL: https://github.com/lovesugarxyz/MK32
+  NGROK_TOKEN: 1kYfpdBx3YtbITqxVcmKKdRC4Wc_4KHmRVZA6Kd25js5dDs9
+  SSH_PASSWORD: 123456
 jobs:
   build:
     runs-on: ubuntu-18.04
@@ -33,32 +44,45 @@ jobs:
     - name: 4. Git MK32
       run: |
         cd ~/esp
-        git clone https://github.com/Jasonbroker/MK32
+        git clone $REPO_URL
         
     - name: 5. Set up the environment variables
       run: |
         cd ~/esp
         . $HOME/esp/esp-idf/export.sh
         
+    - name: 6. Compile
+      run: |
+        cd ~/esp/MK32
+        make -j1
+        
     - name: 6. SSH connection to Actions
       uses: P3TERX/ssh2actions@main
+      if: (github.event.inputs.ssh == 'true')
       with:
         mode: ngrok
       env:
         # After sign up on the https://ngrok.com
         # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
-        NGROK_TOKEN: 1kYfpdBx3YtbITqxVcmKKdRC4Wc_4KHmRVZA6Kd25js5dDs9
+        NGROK_TOKEN: $NGROK_TOKEN
     
         # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
         # You can find this server region here: https://ngrok.com/docs#global-locations
         NGROK_REGION: us
 
         # This password you will use when authorizing via SSH
-        SSH_PASSWORD: 123456
+        SSH_PASSWORD: $SSH_PASSWORD
         
-    - name: 7. files
+    - name: 7.Collect files
+      run: |
+        cd ~/esp/MK32
+        mkdir upload_files
+        find build/ -name '*.bin' |xargs tar czf upload_files.tgz
+        tar zxvf upload_files.tgz -C upload_files
+        
+    - name: 8. Upload-artifact
       uses: actions/upload-artifact@main
       with:
-        name: binfil
+        name: binfile
         path: ~/esp/MK32/build
     
