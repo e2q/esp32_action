@@ -2,6 +2,11 @@
 
 Use github action to compile esp32 firmware
 
+Usage
+
+Replace your own repo url
+REPO_URL: https://github.com/lovesugarxyz/MK32
+
 ## ref
 
 https://docs.espressif.com/projects/esp-idf/en/stable/get-started/index.html
